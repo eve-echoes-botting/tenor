@@ -39,11 +39,15 @@ class tenor_cog(commands.Cog):
             tu = trashbin
             channel = await bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
+            om = await channel.fetch_message(message.reference.message_id)
             uid = payload.user_id
-            if payload.user_id != message.author.id:
-                await channel.send('nah, cant do it for <@{uid}>')
-                return
             user = await bot.fetch_user(uid)
+            if user.bot:
+                return
+            omuid = om.author.id
+            if uid != omuid:
+                await channel.send(f'nah <@{uid}>, cant do it for <@{omuid}>')
+                return
             if user.bot:
                 return
             emoji = payload.emoji
@@ -97,7 +101,7 @@ class tenor_cog(commands.Cog):
                 data = response.json()
                 url = random.choice(data['results'])
                 txt = f'your score: {self.pd["score"][sid]}\n' + f'tap {trashbin} to pay 1 mil and remove this message\n' + url['url']
-                msg = await c.send(txt)
+                msg = await message.reply(txt)
                 await msg.add_reaction(trashbin)
             else:
                 if message.reference:
