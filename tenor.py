@@ -1,4 +1,5 @@
 import random
+import queue
 import json
 import requests
 import discord
@@ -21,12 +22,14 @@ slices = list(zip(
 async def setup(bot):
     l = tenor_cog(bot)
     await bot.add_cog(l)
+    l.delete_msgs.start()
     print(''.join(slicenames))
     print(slices)
 
 class tenor_cog(commands.Cog):
     def __init__(self, bot):
         print('tenor module loaded')
+        self.q = queue.Queue()
         self.pd = pd('tenor.json')
         if 'score' not in self.pd:
             self.pd['score'] = {}
@@ -43,8 +46,9 @@ class tenor_cog(commands.Cog):
             emoji = payload.emoji
             if emoji.name == tu:
                 try:
-                    await channel.send(self.bot.cogs['Banking']._change(uid, -1))
+                    msg = await channel.send(self.bot.cogs['Banking']._change(uid, -1))
                     await message.delete()
+                    self.q.put(msg)
                 except Exception as e:
                     await channel.send(str(e))
 
@@ -115,6 +119,20 @@ class tenor_cog(commands.Cog):
                         await c.send(url['url'])
                 except:
                     pass
+
+    @tasks.loop(seconds = 5)
+    async def delete_msgs(self):
+        try:
+            await self.msg_to_delete.delete()
+            self.msg_to_delete = None
+        except Exception as e:
+            pass
+        try:
+            msg = self.q.get(block = False)
+            self.msg_to_delete = msg
+        except:
+            pass
+
 
 def get_emoji(txt, carry = ''):
     if not txt:
