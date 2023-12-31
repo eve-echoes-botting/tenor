@@ -6,6 +6,7 @@ from discord.ext import commands, tasks
 from pd import pd
 
 
+trashbin = '💵'
 abc = 'abcdefghijklmnopqrstuvwxyz'
 eabc0 = '🅰 🅱 x x x x x x x x x x x x 🅾 x x x x x x x x x x x'.replace(' ', '')
 eabc1 = '🇦 🇧 🇨 🇩 🇪 🇫 🇬 🇭 🇮 🇯 🇰 🇱 🇲 🇳 🇴 🇵 🇶 🇷 🇸 🇹 🇺 🇻 🇼 🇽 🇾 🇿'.replace(' ', '')
@@ -30,10 +31,21 @@ class tenor_cog(commands.Cog):
         if 'score' not in self.pd:
             self.pd['score'] = {}
         self.bot = bot
+        @bot.event
+        async def on_raw_reaction_add(payload):
+            tu = trashbin
+            channel = await bot.fetch_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
+            uid = payload.user_id
+            user = await bot.fetch_user(uid)
+            if user.bot:
+                return
+            emoji = payload.emoji
+            if emoji.name == tu:
+                await channel.send(self.bot.cogs['Banking']._change(uid, -1))
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        return
         a = message.author
         if a.bot:
             return
@@ -41,7 +53,7 @@ class tenor_cog(commands.Cog):
         txt = message.content
         if txt[0] in ['.', ':']:
             return
-        if message.guild.id != 871762312208474133:
+        if message.guild.id not in [ 871762312208474133, 1029050954173132943]:
             return
         words = txt.split()
         if txt.startswith(str(self.bot.user.mention) + ' frp'):
@@ -73,7 +85,9 @@ class tenor_cog(commands.Cog):
                 response = requests.get(query)
                 data = response.json()
                 url = random.choice(data['results'])
-                await c.send(f'your score: {self.pd["score"][sid]}\n' + url['url'])
+                txt = f'your score: {self.pd["score"][sid]}\n' + f'tap {trashbin} to pay 1 mil and remove this message\n' + url['url']
+                msg = await c.send(txt)
+                await msg.add_reaction(trashbin)
             else:
                 if message.reference:
                     ref_message = await c.fetch_message(message.reference.message_id)
