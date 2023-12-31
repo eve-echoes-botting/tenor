@@ -40,6 +40,9 @@ class tenor_cog(commands.Cog):
             channel = await bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             uid = payload.user_id
+            if payload.user_id != message.author.id:
+                await channel.send('nah, cant do it for <@{uid}>')
+                return
             user = await bot.fetch_user(uid)
             if user.bot:
                 return
