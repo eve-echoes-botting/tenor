@@ -42,7 +42,11 @@ class tenor_cog(commands.Cog):
                 return
             emoji = payload.emoji
             if emoji.name == tu:
-                await channel.send(self.bot.cogs['Banking']._change(uid, -1))
+                try:
+                    await channel.send(self.bot.cogs['Banking']._change(uid, -1))
+                    await message.delete()
+                except Exception as e:
+                    await channel.send(str(e))
 
     @commands.Cog.listener()
     async def on_message(self, message):
