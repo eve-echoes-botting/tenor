@@ -85,6 +85,8 @@ class tenor_cog(commands.Cog):
             await c.send(f'<@{451839413836840980}>\n' + url['url'])
         elif len(words) == 1:
             if len(message.mentions) == 0 and not message.reference:
+                if not txt[1].isalnum():
+                    return
                 if txt.startswith('http'):
                     return
                 sid = str(a.id)
