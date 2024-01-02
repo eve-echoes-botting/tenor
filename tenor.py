@@ -100,7 +100,7 @@ class tenor_cog(commands.Cog):
                 response = requests.get(query)
                 data = response.json()
                 url = random.choice(data['results'])
-                txt = f'your score: {self.pd["score"][sid]}\n' + f'tap {trashbin} to pay 1 mil and remove this message\n' + url['url']
+                txt = f'4o bot is on crusade to let people become better and enrich their speech ... by punishing one word messages\nyour score: {self.pd["score"][sid]}\n' + f'tap {trashbin} to pay 1 mil and remove this message\n' + url['url']
                 msg = await message.reply(txt)
                 await msg.add_reaction(trashbin)
             else:
