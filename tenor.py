@@ -87,7 +87,7 @@ class tenor_cog(commands.Cog):
             if len(message.mentions) == 0 and not message.reference:
                 if not txt[1].isalnum():
                     return
-                if txt in ['yes', 'yep', 'yup', 'nop', 'no', 'nope']:
+                if txt.lower() in ['yes', 'yep', 'yup', 'nop', 'no', 'nope']:
                     return
                 if txt.startswith('http'):
                     return
