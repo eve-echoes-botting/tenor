@@ -92,6 +92,8 @@ class tenor_cog(commands.Cog):
                     return
                 if txt.startswith('http'):
                     return
+                if txt[-1] == '?':
+                    return
                 sid = str(a.id)
                 if sid not in self.pd['score']:
                     self.pd['score'][sid] = 0
