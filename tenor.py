@@ -43,6 +43,9 @@ class tenor_cog(commands.Cog):
             om = await channel.fetch_message(message.reference.message_id)
             uid = payload.user_id
             user = await bot.fetch_user(uid)
+            emoji = payload.emoji
+            if emoji.name != tu:
+                return
             if user.bot:
                 return
             omuid = om.author.id
@@ -51,7 +54,6 @@ class tenor_cog(commands.Cog):
                 return
             if user.bot:
                 return
-            emoji = payload.emoji
             if emoji.name == tu:
                 try:
                     msg = await channel.send(self.bot.cogs['Banking']._change(uid, -1))
