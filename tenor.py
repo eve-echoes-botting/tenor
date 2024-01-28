@@ -50,7 +50,6 @@ class tenor_cog(commands.Cog):
                 return
             omuid = om.author.id
             if uid != omuid:
-                await channel.send(f'nah <@{uid}>, cant do it for <@{omuid}>')
                 return
             if user.bot:
                 return
