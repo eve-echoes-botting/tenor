@@ -66,6 +66,8 @@ class tenor_cog(commands.Cog):
         a = message.author
         if a.bot:
             return
+        if a.id in [743638088080687224]:
+            return
         c = message.channel
         txt = message.content
         if txt[0] in ['.', ':']:
