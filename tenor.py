@@ -113,14 +113,6 @@ class tenor_cog(commands.Cog):
                 txt = f'4o bot is on crusade to let people become better and enrich their speech ... by punishing one word messages\nyour score: {self.pd["score"][sid]}\n' + f'tap {trashbin} to pay 1 mil and remove this message\n' + url['url']
                 msg = await message.reply(txt)
                 await msg.add_reaction(trashbin)
-            else:
-                if message.reference:
-                    ref_message = await c.fetch_message(message.reference.message_id)
-                    l = get_emoji(txt.lower())
-                    if l:
-                        for i in l:
-                            await ref_message.add_reaction(i)
-                        await message.delete()
         else:
             for i in words:
                 try:
